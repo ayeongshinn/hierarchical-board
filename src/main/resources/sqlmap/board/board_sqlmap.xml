@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+    <select id="selectBoardList" resultType="board.service.BoardVO">
+        SELECT
+            A.BOARD_NO
+            , A.TITLE
+            , B.NICKNAME
+            , DATE(A.REG_DTTM) AS REG_DTTM
+            , A.VIEW_CNT
+            , A.PARENT_NO
+            , A.GROUP_NO
+            , A.DEPTH
+            , A.SORT_NO
+            , A.USE_YN
+        FROM
+            TB_BOARD A
+        JOIN
+            TB_USER B
+        ON
+            A.USER_NO = B.USER_NO
+        WHERE
+            A.USE_YN = 'Y'
+        ORDER BY
+            REG_DTTM DESC
+    </select>
+
+    <select id="selectBoardDetail" parameterType="board.service.BoardVO" resultType="board.service.BoardVO">
+        SELECT
+            A.BOARD_NO
+            , A.TITLE
+            , A.CONTENT
+            , A.USER_NO
+            , A.REG_DTTM
+            , A.VIEW_CNT
+            , B.USER_ID
+            , B.NICKNAME
+        FROM
+            TB_BOARD A
+        JOIN
+            TB_USER B
+        ON
+            A.USER_NO = B.USER_NO
+        WHERE
+            A.USE_YN = 'Y'
+        AND
+            A.BOARD_NO = #{boardNo}
+    </select>
+
+    <update id="increaseViewCnt" parameterType="board.service.BoardVO">
+        UPDATE TB_BOARD
+        SET VIEW_CNT = VIEW_CNT + 1
+        WHERE BOARD_NO = #{boardNo}
+    </update>
+
+    <insert id="insertBoard" parameterType="board.service.BoardVO" useGeneratedKeys="true" keyProperty="boardNo" keyColumn="BOARD_NO">
+        INSERT INTO TB_BOARD (
+            TITLE
+            , CONTENT
+            , USER_NO
+            , REG_DTTM
+            , USE_YN
+        )
+        VALUES(
+            #{title}
+            , #{content}
+            , #{userNo}
+            , NOW()
+            , 'Y'
+        )
+    </insert>
+
+    <update id="updateBoardGroupNo" parameterType="board.service.BoardVO">
+        UPDATE TB_BOARD
+        SET GROUP_NO = #{boardNo}
+        WHERE BOARD_NO = #{boardNo}
+    </update>
+
+    <update id="updateBoard" parameterType="board.service.BoardVO">
+        UPDATE
+            TB_BOARD
+        SET
+            TITLE = #{title}
+            , CONTENT = #{content}
+            , MOD_DTTM = NOW()
+        WHERE
+            BOARD_NO = #{boardNo}
+    </update>
+
+    <update id="deleteBoard" parameterType="int">
+        UPDATE
+            TB_BOARD
+        SET
+            USE_YN = 'N'
+            , MOD_DTTM = NOW()
+        WHERE
+            BOARD_NO = #{boardNo}
+    </update>
+
+</mapper>

@@ -1,0 +1,30 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Maven
+target/
+
+# Java
+*.class
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tomcat
+logs/
+temp/
+work/
+
+# Local / secret configuration
+application-local.properties
+db.properties
+database.properties
