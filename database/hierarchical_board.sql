@@ -1,0 +1,114 @@
+/*M!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.20-11.8.9-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: hierarchical_board
+-- ------------------------------------------------------
+-- Server version	11.8.9-MariaDB-ubu2404
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
+
+--
+-- Table structure for table `TB_BOARD`
+--
+
+DROP TABLE IF EXISTS `TB_BOARD`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `TB_BOARD` (
+  `BOARD_NO` int(11) NOT NULL AUTO_INCREMENT COMMENT '글_번호',
+  `TITLE` varchar(200) NOT NULL COMMENT '제목',
+  `CONTENT` text DEFAULT NULL COMMENT '내용',
+  `USER_NO` int(11) NOT NULL,
+  `REG_DTTM` datetime NOT NULL DEFAULT current_timestamp() COMMENT '등록_일시',
+  `MOD_DTTM` datetime DEFAULT NULL COMMENT '수정_일시',
+  `VIEW_CNT` int(11) NOT NULL DEFAULT 0 COMMENT '조회수',
+  `PARENT_NO` int(11) DEFAULT NULL COMMENT '부모_번호',
+  `GROUP_NO` int(11) DEFAULT NULL COMMENT '그룹_번호',
+  `DEPTH` int(11) NOT NULL DEFAULT 0 COMMENT '계층',
+  `SORT_NO` int(11) NOT NULL DEFAULT 0 COMMENT '정렬_번호',
+  `USE_YN` char(1) NOT NULL DEFAULT 'Y',
+  PRIMARY KEY (`BOARD_NO`),
+  KEY `FK_BOARD_USER` (`USER_NO`),
+  CONSTRAINT `FK_BOARD_USER` FOREIGN KEY (`USER_NO`) REFERENCES `TB_USER` (`USER_NO`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TB_BOARD`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `TB_BOARD` WRITE;
+/*!40000 ALTER TABLE `TB_BOARD` DISABLE KEYS */;
+INSERT INTO `TB_BOARD` VALUES
+(1,'제목 수정','수고요gg',1,'2026-09-19 23:40:29','2026-10-03 03:22:06',25,NULL,1,0,0,'Y'),
+(2,'태ㅔ스트','잘대나',1,'2026-09-20 04:01:45',NULL,16,NULL,2,0,0,'Y'),
+(3,'나중에 정신 나간 기능 마니 넣어야지','예를 들어 랜덤으로 태그 생성도ㅓㅣ는 거..\r\n그러면 태그 테이블 하나 더 만들어야 대나',1,'2026-10-01 04:35:22','2026-10-01 04:43:34',9,NULL,3,0,0,'N'),
+(4,'test','아무튼게시판',1,'2026-10-01 04:44:06','2026-10-01 04:44:09',2,NULL,4,0,0,'N'),
+(5,'ㅇ.ㅇ','배고파',1,'2026-10-02 04:45:09','2026-10-02 04:45:12',1,NULL,5,0,0,'N'),
+(6,'게시글 1',' test',1,'2026-10-06 22:44:28',NULL,1,NULL,6,0,0,'Y'),
+(7,'게시글 2','ㅇ',1,'2026-10-06 22:44:35',NULL,2,NULL,7,0,0,'Y'),
+(8,'게시글 3','ㅇ',1,'2026-10-06 22:44:55',NULL,3,NULL,8,0,0,'Y'),
+(9,'페이징만들어야징','ㅇㅇ',1,'2026-10-06 22:49:09',NULL,14,NULL,9,0,0,'Y'),
+(10,'우사기','귀여워',1,'2026-10-06 22:49:24',NULL,5,NULL,10,0,0,'Y'),
+(11,'ㅇ.ㅇ','ㅎ2',1,'2026-10-06 22:49:44',NULL,3,NULL,11,0,0,'Y'),
+(12,'아무튼게시글','ㅇ',1,'2026-10-06 22:49:58',NULL,27,NULL,12,0,0,'Y'),
+(13,'안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요','ㅎ2',1,'2026-10-06 22:50:34','2026-10-07 02:14:34',59,NULL,13,0,0,'Y'),
+(14,'밤티게시판..','ㅠㅠ',1,'2026-10-07 01:29:39',NULL,10,NULL,14,0,0,'Y');
+/*!40000 ALTER TABLE `TB_BOARD` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `TB_USER`
+--
+
+DROP TABLE IF EXISTS `TB_USER`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `TB_USER` (
+  `USER_NO` int(11) NOT NULL AUTO_INCREMENT,
+  `USER_ID` varchar(30) DEFAULT NULL,
+  `NICKNAME` varchar(10) DEFAULT NULL,
+  `USER_PWD` varchar(30) DEFAULT NULL,
+  `JOIN_DATE` datetime DEFAULT NULL,
+  `MODI_DATE` datetime DEFAULT NULL,
+  `USE_YN` char(1) NOT NULL DEFAULT 'Y',
+  PRIMARY KEY (`USER_NO`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TB_USER`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `TB_USER` WRITE;
+/*!40000 ALTER TABLE `TB_USER` DISABLE KEYS */;
+INSERT INTO `TB_USER` VALUES
+(1,'lifeisegg','계란말이중독자','dptmspt12!@','2026-10-05 23:26:12',NULL,'Y');
+/*!40000 ALTER TABLE `TB_USER` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
+
+-- Dump completed on 2026-10-07  4:20:23
