@@ -21,6 +21,10 @@ public class DataAccessDAO {
         return sqlSession.selectList(queryId, param);
     }
 
+    public <T> T selectOne(String queryId) {
+        return sqlSession.selectOne(queryId);
+    }
+
     public <T> T selectOne(String queryId, Object param) {
         return sqlSession.selectOne(queryId, param);
     }

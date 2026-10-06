@@ -6,8 +6,8 @@
     <meta charset="UTF-8">
     <title><tiles:getAsString name="title"/></title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common/layout.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common/layout.css?v=<%= System.currentTimeMillis() %>">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/board/board.css?v=<%= System.currentTimeMillis() %>">
     <link rel="icon" href="${pageContext.request.contextPath}/images/favicon.ico">
 </head>
 

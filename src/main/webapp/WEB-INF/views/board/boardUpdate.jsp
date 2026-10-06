@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<body>
+
 <div class="board-detail">
     <form id="updateForm">
         <input type="hidden" name="boardNo" value="${boardNo}">
@@ -9,8 +8,6 @@
             <div class="detail-title">
                 <input type="text" id="title" name="title" maxlength="200">
             </div>
-
-            <div class="detail-date" id="regDttm"></div>
         </div>
 
         <div class="detail-writer">
@@ -18,9 +15,7 @@
             <span class="detail-user-id">(<span id="userId"></span>)</span>
         </div>
 
-        <div class="detail-content">
-            <textarea id="content" name="content"></textarea>
-        </div>
+        <textarea class="detail-content" id="content" name="content"></textarea>
 
         <div class="detail-btn-area">
             <button type="button" id="btnCancel">취소</button>
@@ -28,8 +23,7 @@
         </div>
     </form>
 </div>
-</body>
-</html>
+
 <script>
 const boardNo = ${boardNo};
 
@@ -39,7 +33,11 @@ const boardNo = ${boardNo};
         $('#title').focus();
 
         $('#btnCancel').on("click", function() {
-            location.href = '${pageContext.request.contextPath}/board/updateBoardView.do?boardNo=${boardNo}';
+            if(confirm("게시글 수정을 취소하시겠습니까?")) {
+                location.href = '${pageContext.request.contextPath}/board/selectBoardDetailView.do?boardNo=${boardNo}';
+            } else {
+                return;
+            }
         })
 
         $('#btnSave').on("click", function() {
@@ -52,7 +50,7 @@ const boardNo = ${boardNo};
             url: '${pageContext.request.contextPath}/board/selectBoardDetail.do',
             type: 'GET',
             data: {
-                boardNo: '${boardNo}'
+                boardNo: boardNo
             },
             dataType: 'json',
             success: function(res) {
@@ -85,7 +83,7 @@ const boardNo = ${boardNo};
                 success: function(res) {
                     if(res > 0) {
                         alert("게시글이 수정되었습니다");
-                        location.href = '${pageContext.request.contextPath}/board/boardDetailView.do?boardNo=${boardNo}';
+                        location.href = '${pageContext.request.contextPath}/board/selectBoardDetailView.do?boardNo=${boardNo}';
                     } else {
                         alert("게시글 수정 실패하였습니다");
                     }

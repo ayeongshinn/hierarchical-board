@@ -17,8 +17,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardVO> selectBoardList() {
-        return dataAccessDAO.list("board.selectBoardList");
+    public int selectBoardTotalCnt(BoardVO boardVO) {
+        return dataAccessDAO.selectOne("board.selectBoardTotalCnt", boardVO);
+    }
+
+    @Override
+    public List<BoardVO> selectBoardList(BoardVO boardVO) {
+        return dataAccessDAO.list("board.selectBoardList", boardVO);
     }
 
     @Override

@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div class="board-detail">
-
     <form id="insertForm">
         <!-- userNo 하드코딩 추후 수정할 것-->
         <input type="hidden" name="userNo" value="1">
@@ -11,23 +10,23 @@
             </div>
         </div>
 
-        <div class="detail-content">
-            <textarea id="content" name="content" placeholder="내용을 입력해 주세요"></textarea>
-        </div>
+        <textarea class="detail-content" id="content" name="content" placeholder="내용을 입력해 주세요"></textarea>
 
         <div class="detail-btn-area">
             <button type="button" id="btnCancel">취소</button>
             <button type="button" id="btnSave">등록</button>
         </div>
-
     </form>
-
 </div>
 
 <script>
     $(function() {
         $('#btnCancel').on('click', function() {
-            location.href = '${pageContext.request.contextPath}/board/selectBoardView.do';
+            if(confirm("게시글 작성을 취소하시겠습니까?")) {
+                location.href = '${pageContext.request.contextPath}/board/selectBoardView.do';
+            } else {
+                return;
+            }
         });
 
         $('#btnSave').on('click', function() {

@@ -1,15 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<body>
 <div class="board-detail">
     <form id="detailForm" method="post">
         <div class="detail-head">
             <div class="detail-title" id="title"></div>
+            <div class="detail-viewCnt">
+                조회수 <span id="viewCnt"></span>
+            </div>
             <div class="detail-date" id="regDttm"></div>
-        </div>
-
-        <div class="detail-viewCnt">
-            조회수 <span id="viewCnt"></span>
         </div>
 
         <div class="detail-writer">
@@ -25,15 +22,16 @@
         </div>
 
         <div class="detail-comment-head">
-            <span>댓글</span>
-            <span>(<span id="commentCount">0</span>)</span>
+            <span>댓글(<span id="commentCnt">0</span>)</span>
+        </div>
+        <div class="detail-comment-body">
+            <input type="text" id="commentContent" placeholder="댓글을 입력하세요">
+            <button type="button" id="commentRegBtn">등록</button>
         </div>
     </form>
     <div id="commentList" class="comment-list"></div>
-
 </div>
-</body>
-</html>
+
 <script>
 const boardNo = ${boardNo};
 

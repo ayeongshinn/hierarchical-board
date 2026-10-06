@@ -2,7 +2,6 @@ package board.web;
 
 import board.service.BoardService;
 import board.service.BoardVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/board")
@@ -35,14 +36,29 @@ public class BoardController {
      */
     @GetMapping("/selectBoardList.do")
     @ResponseBody
-    public List<BoardVO> selectBoardList() {
-        return boardService.selectBoardList();
+    public Map<String, Object> selectBoardList(BoardVO boardVO) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        int currentPage = boardVO.getCurrentPage();
+        int perPage = 10;
+        int offset = (currentPage - 1) * 10;
+
+        boardVO.setPerPage(perPage);
+        boardVO.setOffset(offset);
+
+        int totalCnt = boardService.selectBoardTotalCnt(boardVO);
+        List<BoardVO> boardList = boardService.selectBoardList(boardVO);
+
+        resultMap.put("totalCnt", totalCnt);
+        resultMap.put("boardList", boardList);
+
+        return resultMap;
     }
 
     /**
      * 게시글 상세 화면
      */
-    @GetMapping("/boardDetailView.do")
+    @GetMapping("/selectBoardDetailView.do")
     public String selectBoardDetailView(BoardVO boardVO, Model model) {
         model.addAttribute("boardNo", boardVO.getBoardNo());
         return "board/boardDetail";
@@ -63,7 +79,7 @@ public class BoardController {
      * 게시글 등록 화면
      * @return
      */
-    @GetMapping("/boardInsertView.do")
+    @GetMapping("/insertBoardView.do")
     public String insertBoardView() {
         return "board/boardInsert";
     }
@@ -110,7 +126,6 @@ public class BoardController {
     @PostMapping("/deleteBoard.do")
     @ResponseBody
     public int deleteBoard(int boardNo) {
-        System.out.println("삭제 boardNo = " + boardNo);
         return boardService.deleteBoard(boardNo);
     }
 

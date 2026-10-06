@@ -6,12 +6,59 @@
 
 <mapper namespace="board">
 
+    <select id="selectBoardTotalCnt" parameterType="board.service.BoardVO" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM (
+                SELECT
+                    A.BOARD_NO
+                    , A.TITLE
+                    , B.NICKNAME
+                    , DATE(A.REG_DTTM) AS REG_DT
+                    , A.REG_DTTM
+                    , A.VIEW_CNT
+                    , A.PARENT_NO
+                    , A.GROUP_NO
+                    , A.DEPTH
+                    , A.SORT_NO
+                    , A.USE_YN
+                FROM
+                    TB_BOARD A
+                JOIN
+                    TB_USER B
+                ON
+                    A.USER_NO = B.USER_NO
+                WHERE
+                    A.USE_YN = 'Y'
+                ORDER BY
+                    A.REG_DTTM DESC
+            ) T
+        WHERE 1 = 1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchCategory == 'title'">
+                    AND T.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+                <when test="searchCategory == 'writer'">
+                    AND T.NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+                <otherwise>
+                    AND (
+                        T.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                        OR T.NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
     <select id="selectBoardList" resultType="board.service.BoardVO">
         SELECT
             A.BOARD_NO
             , A.TITLE
             , B.NICKNAME
-            , DATE(A.REG_DTTM) AS REG_DTTM
+            , DATE(A.REG_DTTM) AS REG_DT
+            , A.REG_DTTM
             , A.VIEW_CNT
             , A.PARENT_NO
             , A.GROUP_NO
@@ -26,8 +73,26 @@
             A.USER_NO = B.USER_NO
         WHERE
             A.USE_YN = 'Y'
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchCategory == 'title'">
+                    AND A.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+                <when test="searchCategory == 'writer'">
+                    AND B.NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+                <otherwise>
+                    AND (
+                        A.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                        OR B.NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
         ORDER BY
-            REG_DTTM DESC
+            A.REG_DTTM DESC
+        LIMIT
+            #{offset}, #{perPage}
     </select>
 
     <select id="selectBoardDetail" parameterType="board.service.BoardVO" resultType="board.service.BoardVO">
